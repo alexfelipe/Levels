@@ -20,7 +20,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.alura.levels.dao.GamesDao
-import br.com.alura.levels.sampleData.sampleFavoriteGames
 import br.com.alura.levels.sampleData.sampleGames
 import br.com.alura.levels.ui.theme.LevelsTheme
 import kotlinx.coroutines.launch
@@ -43,7 +42,7 @@ fun FavoriteGames(dao: GamesDao) {
                     Icon(
                         Icons.Default.Star,
                         contentDescription = null,
-                        Modifier.pointerInput(Unit) {
+                        Modifier.pointerInput(game) {
                             detectTapGestures(
                                 onTap = {
                                     scope.launch {

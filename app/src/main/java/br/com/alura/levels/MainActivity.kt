@@ -1,15 +1,13 @@
 package br.com.alura.levels
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
@@ -19,7 +17,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.com.alura.levels.dao.GamesDao
 import br.com.alura.levels.model.User
-import br.com.alura.levels.sampleData.sampleFavoriteGames
 import br.com.alura.levels.sampleData.sampleGames
 import br.com.alura.levels.ui.screens.*
 import br.com.alura.levels.ui.theme.LevelsTheme
@@ -71,7 +68,9 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     ) {
-                        val dao = GamesDao(sampleGames)
+                        val dao = remember {
+                            GamesDao(sampleGames)
+                        }
                         NavHost(
                             navController = navController,
                             startDestination = Screen.GamesList.route,

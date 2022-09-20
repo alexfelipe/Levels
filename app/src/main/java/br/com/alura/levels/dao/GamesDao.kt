@@ -17,7 +17,7 @@ class GamesDao(
     init {
         Companion.games.addAll(games)
         CoroutineScope(dispatcher).launch {
-            gamesFlow.emit(Companion.games.toList())
+            gamesFlow.emit(games)
         }
     }
 
@@ -41,12 +41,11 @@ class GamesDao(
         }.let { index ->
             if (index == -1) {
                 games.add(game)
-                return@let
             } else {
                 games[index] = game
             }
         }
-        gamesFlow.emit(games.toList())
+        gamesFlow.emit(listOf(*games.toTypedArray()))
     }
 
 }

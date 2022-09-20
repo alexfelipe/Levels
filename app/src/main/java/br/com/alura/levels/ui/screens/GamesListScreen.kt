@@ -1,11 +1,15 @@
 package br.com.alura.levels.ui.screens
 
+import android.util.Log
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Icon
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Surface
+import androidx.compose.material.Text
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
@@ -24,11 +28,14 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun GamesListScreen(dao: GamesDao) {
-    val games by dao.games().collectAsState(initial = emptyList())
+    val games by dao.games().collectAsState(emptyList())
     val scope = rememberCoroutineScope()
-    LazyColumn(contentPadding = PaddingValues(16.dp),
-    verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    LazyColumn(
+        contentPadding = PaddingValues(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)
+    ) {
         items(games) { game ->
+            Log.i("GamesList", "GamesListScreen: $game")
             Surface(
                 Modifier
                     .fillMaxWidth()
@@ -48,15 +55,13 @@ fun GamesListScreen(dao: GamesDao) {
                         contentDescription = null,
                         Modifier
                             .size(36.dp)
-                            .pointerInput(Unit) {
-                            detectTapGestures(
-                                onTap = {
+                            .pointerInput(game) {
+                                detectTapGestures(onTap = {
                                     scope.launch {
                                         dao.save(game.copy(favorited = !game.favorited))
                                     }
-                                }
-                            )
-                        },
+                                })
+                            },
                         tint = iconTint
                     )
                 }
