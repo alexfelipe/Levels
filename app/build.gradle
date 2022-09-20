@@ -49,6 +49,7 @@ android {
 dependencies {
     def nav_version = "2.5.2"
 
+    implementation "io.coil-kt:coil-compose:2.2.1"
     implementation "androidx.navigation:navigation-compose:$nav_version"
 
     implementation 'androidx.core:core-ktx:1.9.0'

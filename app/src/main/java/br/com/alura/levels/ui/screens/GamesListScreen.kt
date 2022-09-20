@@ -1,16 +1,11 @@
 package br.com.alura.levels.ui.screens
 
-import android.util.Log
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Card
-import androidx.compose.material.Icon
-import androidx.compose.material.Text
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.runtime.Composable
@@ -19,24 +14,26 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import br.com.alura.levels.dao.GamesDao
 import br.com.alura.levels.sampleData.sampleGames
+import br.com.alura.levels.ui.theme.LevelsTheme
 import kotlinx.coroutines.launch
 
 @Composable
 fun GamesListScreen(dao: GamesDao) {
-    val myGames by dao.games().collectAsState(initial = emptyList())
+    val games by dao.games().collectAsState(initial = emptyList())
     val scope = rememberCoroutineScope()
-    Log.i("GamesListScreen", "GamesListScreen: $myGames")
-    LazyColumn {
-        items(myGames) { game ->
-            Card(
+    LazyColumn(contentPadding = PaddingValues(16.dp),
+    verticalArrangement = Arrangement.spacedBy(16.dp)) {
+        items(games) { game ->
+            Surface(
                 Modifier
-                    .padding(8.dp)
                     .fillMaxWidth()
-                    .heightIn(100.dp)
+                    .heightIn(100.dp),
+                shape = RoundedCornerShape(10)
             ) {
                 Column(Modifier.padding(8.dp)) {
                     Text(text = game.name)
@@ -49,10 +46,16 @@ fun GamesListScreen(dao: GamesDao) {
                     Icon(
                         Icons.Default.Star,
                         contentDescription = null,
-                        Modifier.clickable {
-                            scope.launch {
-                                dao.save(game.copy(favorited = !game.favorited))
-                            }
+                        Modifier
+                            .size(36.dp)
+                            .pointerInput(Unit) {
+                            detectTapGestures(
+                                onTap = {
+                                    scope.launch {
+                                        dao.save(game.copy(favorited = !game.favorited))
+                                    }
+                                }
+                            )
                         },
                         tint = iconTint
                     )
@@ -65,6 +68,10 @@ fun GamesListScreen(dao: GamesDao) {
 @Preview(showBackground = true)
 @Composable
 fun GamesListPreview() {
-    GamesListScreen(GamesDao(sampleGames))
+    LevelsTheme {
+        Surface(color = MaterialTheme.colors.background) {
+            GamesListScreen(GamesDao(sampleGames))
+        }
+    }
 }
 

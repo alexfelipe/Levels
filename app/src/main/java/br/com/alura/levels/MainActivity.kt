@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import br.com.alura.levels.dao.GamesDao
+import br.com.alura.levels.model.User
 import br.com.alura.levels.sampleData.sampleFavoriteGames
 import br.com.alura.levels.sampleData.sampleGames
 import br.com.alura.levels.ui.screens.*
@@ -27,7 +28,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            LevelsTheme {
+            LevelsTheme(darkTheme = true) {
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
@@ -83,7 +84,12 @@ class MainActivity : ComponentActivity() {
                                 FavoriteGames(dao)
                             }
                             composable(Screen.Profile.route) {
-                                ProfileScreen()
+                                ProfileScreen(
+                                    User(
+                                        nickname = "alexfelipe",
+                                        avatar = "https://i.pinimg.com/474x/9f/b2/75/9fb275c854b7edd12e57a8a0113b2b70.jpg"
+                                    )
+                                )
                             }
                             composable(Screen.SignIn.route) {
                                 SignInScreen()
