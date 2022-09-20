@@ -15,7 +15,7 @@ sealed class Screen(
     object GamesList : Screen(
         route = "gamesList",
         icon = Icons.Default.Gamepad,
-        label = "Games list"
+        label = "Games"
     )
 
     object FavoriteGames : Screen(

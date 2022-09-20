@@ -1,24 +1,25 @@
 package br.com.alura.levels
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.*
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.internal.composableLambda
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import br.com.alura.levels.dao.GamesDao
+import br.com.alura.levels.sampleData.sampleFavoriteGames
+import br.com.alura.levels.sampleData.sampleGames
 import br.com.alura.levels.ui.screens.*
 import br.com.alura.levels.ui.theme.LevelsTheme
 
@@ -27,7 +28,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             LevelsTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background
@@ -70,16 +70,17 @@ class MainActivity : ComponentActivity() {
                             }
                         }
                     ) {
+                        val dao = GamesDao(sampleGames)
                         NavHost(
                             navController = navController,
                             startDestination = Screen.GamesList.route,
                             Modifier.padding(it)
                         ) {
                             composable(Screen.GamesList.route) {
-                                GamesListScreen()
+                                GamesListScreen(dao)
                             }
                             composable(Screen.FavoriteGames.route) {
-                                FavoriteGames()
+                                FavoriteGames(dao)
                             }
                             composable(Screen.Profile.route) {
                                 ProfileScreen()
