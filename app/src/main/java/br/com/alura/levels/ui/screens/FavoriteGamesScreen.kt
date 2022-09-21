@@ -64,7 +64,7 @@ fun FavoriteGames(dao: GamesDao) {
 @Composable
 fun FavoriteGamesPreview() {
     LevelsTheme {
-        Surface(color = MaterialTheme.colors.background) {
+        Surface {
             FavoriteGames(GamesDao(sampleGames))
         }
     }

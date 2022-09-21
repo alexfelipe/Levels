@@ -11,10 +11,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation.compose.*
 import br.com.alura.levels.dao.GamesDao
 import br.com.alura.levels.model.User
 import br.com.alura.levels.sampleData.sampleGames
@@ -25,10 +22,9 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            LevelsTheme(darkTheme = true) {
+            LevelsTheme {
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
+                    modifier = Modifier.fillMaxSize()
                 ) {
                     val screens = listOf(
                         Screen.GamesList,
@@ -38,32 +34,40 @@ class MainActivity : ComponentActivity() {
                     val navController = rememberNavController()
                     Scaffold(
                         bottomBar = {
-                            BottomNavigation {
-                                val navBackStackEntry by
-                                navController.currentBackStackEntryAsState()
-                                val currentDestination = navBackStackEntry?.destination
-                                screens.forEach { screen ->
-                                    BottomNavigationItem(
-                                        selected = currentDestination?.hierarchy?.any {
-                                            it.route == screen.route
-                                        } == true,
-                                        label = {
-                                            Text(text = screen.label)
-                                        },
-                                        icon = {
-                                            screen.icon?.let {
-                                                Icon(it, contentDescription = null)
-                                            }
-                                        },
-                                        onClick = {
-                                            navController.navigate(screen.route) {
-                                                popUpTo(navController.graph.findStartDestination().id) {
-                                                    saveState = true
+                            val navBackStackEntry by
+                            navController.currentBackStackEntryAsState()
+                            val currentDestination = navBackStackEntry?.destination
+                            val isBottomNavigationItem =
+                                currentDestination?.route?.let { route ->
+                                    screens.firstOrNull {
+                                        it.route == route
+                                    } != null
+                                } ?: false
+                            if (isBottomNavigationItem) {
+                                BottomNavigation {
+                                    screens.forEach { screen ->
+                                        BottomNavigationItem(
+                                            selected = currentDestination?.hierarchy?.any {
+                                                it.route == screen.route
+                                            } == true,
+                                            label = {
+                                                Text(text = screen.label)
+                                            },
+                                            icon = {
+                                                screen.icon?.let {
+                                                    Icon(it, contentDescription = null)
                                                 }
-                                                launchSingleTop = true
-                                                restoreState = true
-                                            }
-                                        })
+                                            },
+                                            onClick = {
+                                                navController.navigate(screen.route) {
+                                                    popUpTo(navController.graph.findStartDestination().id) {
+                                                        saveState = true
+                                                    }
+                                                    launchSingleTop = true
+                                                    restoreState = true
+                                                }
+                                            })
+                                    }
                                 }
                             }
                         }
@@ -73,7 +77,7 @@ class MainActivity : ComponentActivity() {
                         }
                         NavHost(
                             navController = navController,
-                            startDestination = Screen.GamesList.route,
+                            startDestination = Screen.SignIn.route,
                             Modifier.padding(it)
                         ) {
                             composable(Screen.GamesList.route) {
@@ -86,15 +90,27 @@ class MainActivity : ComponentActivity() {
                                 ProfileScreen(
                                     User(
                                         nickname = "alexfelipe",
-                                        avatar = "https://i.pinimg.com/474x/9f/b2/75/9fb275c854b7edd12e57a8a0113b2b70.jpg"
-                                    )
+                                        avatar = "https://1.bp.blogspot.com/-pcFln_2fDmU/YVHSERlXM3I/AAAAAAAAB_Y/tGzfezDKTGogykVhnYGML6EBhGiuldxzACLcBGAsYHQ/s1280/O%2BFilme%2Bde%2BJujutsu%2BKaisen%2B0%2Brevelou%2Bo%2Bdesign%2Bde%2BSatoru%2BGojo%2BMANUAL%2BDO%2BOTAKU.webp"
+                                    ),
+                                    onLeaveClick = {
+                                        navController.navigate(Screen.SignIn.route)
+                                    }
                                 )
                             }
                             composable(Screen.SignIn.route) {
-                                SignInScreen()
+                                SignInScreen(
+                                    onSignInClick = {
+                                        navController.navigate(Screen.GamesList.route)
+                                    },
+                                    onSignUpClick = {
+                                        navController.navigate(Screen.SignUp.route)
+                                    }
+                                )
                             }
                             composable(Screen.SignUp.route) {
-                                SignUpScreen()
+                                SignUpScreen(onSignUpClick = {
+                                    navController.popBackStack()
+                                })
                             }
                         }
                     }

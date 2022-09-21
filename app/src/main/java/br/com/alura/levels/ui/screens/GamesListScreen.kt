@@ -1,6 +1,5 @@
 package br.com.alura.levels.ui.screens
 
-import android.util.Log
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -35,7 +34,6 @@ fun GamesListScreen(dao: GamesDao) {
         verticalArrangement = Arrangement.spacedBy(16.dp)
     ) {
         items(games) { game ->
-            Log.i("GamesList", "GamesListScreen: $game")
             Surface(
                 Modifier
                     .fillMaxWidth()
@@ -74,7 +72,7 @@ fun GamesListScreen(dao: GamesDao) {
 @Composable
 fun GamesListPreview() {
     LevelsTheme {
-        Surface(color = MaterialTheme.colors.background) {
+        Surface {
             GamesListScreen(GamesDao(sampleGames))
         }
     }
