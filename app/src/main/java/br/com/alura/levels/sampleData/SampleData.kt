@@ -1,6 +1,7 @@
 package br.com.alura.levels.sampleData
 
 import br.com.alura.levels.model.Game
+import br.com.alura.levels.model.User
 
 val sampleGames = listOf(
     Game(
@@ -23,4 +24,13 @@ val sampleGames = listOf(
     )
 )
 
-val sampleFavoriteGames = sampleGames.filter(Game::favorited)
+val sampleUsers = listOf(
+    User(
+        nickname = "alexfelipe",
+        avatar = "https://cdn.epicstream.com/assets/uploads/ckeditor/images/1634102916_gojo.jpg"
+    ),
+    User(
+        nickname = "kako",
+        avatar = "https://www.hypeness.com.br/1/2015/04/sapo-caco3.jpg"
+    )
+)

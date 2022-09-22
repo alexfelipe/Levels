@@ -18,7 +18,7 @@ import br.com.alura.levels.ui.theme.LevelsTheme
 
 @Composable
 fun SignInScreen(
-    onSignInClick: () -> Unit = {},
+    onSignInClick: (String) -> Unit = {},
     onSignUpClick: () -> Unit = {},
 ) {
     Column(
@@ -66,7 +66,9 @@ fun SignInScreen(
             }
         )
         Button(
-            onClick = { onSignInClick() }, Modifier
+            onClick = {
+                onSignInClick(nickname)
+            }, Modifier
                 .fillMaxWidth()
         ) {
             Text(text = "Entrar")
